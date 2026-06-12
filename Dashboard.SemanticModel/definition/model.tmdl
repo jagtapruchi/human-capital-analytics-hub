@@ -1,0 +1,29 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Dim_Employee","Dim_Skills","Bridge_Employee_Skills","Fact_Performance_Reviews","Fact_Skill_Assessments","Fact_Training_LMS"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Dim_Employee
+ref table DateTableTemplate_f431495b-62ba-4d06-92dc-29ba853b9d9d
+ref table LocalDateTable_2272a602-c771-4417-bc46-e20030e96f89
+ref table Dim_Skills
+ref table Bridge_Employee_Skills
+ref table Fact_Performance_Reviews
+ref table LocalDateTable_7cc0f696-0009-494e-abe0-4eb2f10ba2da
+ref table Fact_Skill_Assessments
+ref table LocalDateTable_f5ea681d-b069-448d-80d4-6753b3384135
+ref table Fact_Training_LMS
+ref table LocalDateTable_bd0bd1cf-9deb-49aa-b085-793bd11b8070
+ref table _Measures
+
+ref cultureInfo en-US
+

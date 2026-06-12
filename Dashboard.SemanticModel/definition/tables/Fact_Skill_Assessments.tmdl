@@ -1,0 +1,75 @@
+table Fact_Skill_Assessments
+	lineageTag: 4b10a9ad-4157-4b17-b1fc-9b129d08744e
+
+	column AssessmentID
+		dataType: string
+		lineageTag: ab829a9f-cac9-4f31-a8e7-649b69c9059c
+		summarizeBy: none
+		sourceColumn: AssessmentID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeID
+		dataType: string
+		lineageTag: 2eedf14c-6670-4c65-9650-0a7b37f6859d
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SkillID
+		dataType: string
+		lineageTag: 7e24c0d2-3ca5-435a-8c36-a7856ea284b6
+		summarizeBy: none
+		sourceColumn: SkillID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssessmentDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f2d9ca64-6aad-4179-8bdb-de34b762bdf3
+		summarizeBy: none
+		sourceColumn: AssessmentDate
+
+		variation Variation
+			isDefault
+			relationship: 7291cc9c-26bb-4606-994b-56b89aae35f7
+			defaultHierarchy: LocalDateTable_f5ea681d-b069-448d-80d4-6753b3384135.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Timeline
+		dataType: string
+		lineageTag: 6d335ec6-f4c2-43cf-ab33-fc2f5372e881
+		summarizeBy: none
+		sourceColumn: Timeline
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrentScore
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b58e831-3009-47db-b138-24a07ae096d5
+		summarizeBy: sum
+		sourceColumn: CurrentScore
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Skill_Assessments = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\DPBA\DPBA First Project\Fact_Skill_Assessments.xlsx"), null, true),
+				    Fact_Skill_Assessments_Sheet = Source{[Item="Fact_Skill_Assessments",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Fact_Skill_Assessments_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"AssessmentID", type text}, {"EmployeeID", type text}, {"SkillID", type text}, {"AssessmentDate", type date}, {"Timeline", type text}, {"CurrentScore", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,84 @@
+table Fact_Training_LMS
+	lineageTag: 12095c12-8ce4-4b1b-a185-98f8b2e7971c
+
+	column TrainingID
+		dataType: string
+		lineageTag: 1722eb48-9749-492a-83f1-728194e38727
+		summarizeBy: none
+		sourceColumn: TrainingID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeID
+		dataType: string
+		lineageTag: 46c77136-c2d2-40b3-93e9-200edd170ad4
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CourseID
+		dataType: string
+		lineageTag: e26a8194-4b61-42c9-9df2-ac325e5050d1
+		summarizeBy: none
+		sourceColumn: CourseID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CourseName
+		dataType: string
+		lineageTag: f4bcd45d-3638-47c6-9bd9-260a71f50797
+		summarizeBy: none
+		sourceColumn: CourseName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CompletionDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 290f1ea3-00db-4de6-8cfb-6547b276eb45
+		summarizeBy: none
+		sourceColumn: CompletionDate
+
+		variation Variation
+			isDefault
+			relationship: 1008c277-43ea-418b-a213-4ba688cb1306
+			defaultHierarchy: LocalDateTable_bd0bd1cf-9deb-49aa-b085-793bd11b8070.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TrainingCost
+		dataType: int64
+		formatString: 0
+		lineageTag: 11aecea7-686e-40ae-b09b-67b8aa129856
+		summarizeBy: sum
+		sourceColumn: TrainingCost
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoursSpent
+		dataType: int64
+		formatString: 0
+		lineageTag: f81f5313-ed98-4c06-94a4-b87842111dad
+		summarizeBy: sum
+		sourceColumn: HoursSpent
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Training_LMS = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\DPBA\DPBA First Project\Fact_Training_LMS.xlsx"), null, true),
+				    Fact_Training_LMS_Sheet = Source{[Item="Fact_Training_LMS",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Fact_Training_LMS_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"TrainingID", type text}, {"EmployeeID", type text}, {"CourseID", type text}, {"CourseName", type text}, {"CompletionDate", type date}, {"TrainingCost", Int64.Type}, {"HoursSpent", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,44 @@
+relationship a02bcc29-acd9-467b-b412-2dc0df17eea7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Employee.HireDate
+	toColumn: LocalDateTable_2272a602-c771-4417-bc46-e20030e96f89.Date
+
+relationship 2be492ff-ea1a-4988-9231-9f08a1c65c8c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Performance_Reviews.ReviewDate
+	toColumn: LocalDateTable_7cc0f696-0009-494e-abe0-4eb2f10ba2da.Date
+
+relationship 7291cc9c-26bb-4606-994b-56b89aae35f7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Skill_Assessments.AssessmentDate
+	toColumn: LocalDateTable_f5ea681d-b069-448d-80d4-6753b3384135.Date
+
+relationship 1008c277-43ea-418b-a213-4ba688cb1306
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Training_LMS.CompletionDate
+	toColumn: LocalDateTable_bd0bd1cf-9deb-49aa-b085-793bd11b8070.Date
+
+relationship 17791d51-93ea-0173-3755-5fc0d6745742
+	fromColumn: Bridge_Employee_Skills.EmployeeID
+	toColumn: Dim_Employee.EmployeeID
+
+relationship dc0ca093-7dca-d50a-3749-f56e577681db
+	fromColumn: Bridge_Employee_Skills.SkillID
+	toColumn: Dim_Skills.SkillID
+
+relationship d75aa9ae-42d2-ec5e-7905-5a4341b17b8b
+	fromColumn: Fact_Skill_Assessments.EmployeeID
+	toColumn: Dim_Employee.EmployeeID
+
+relationship c1f2c58f-d184-7cc1-2abb-9ec156a8d1ef
+	fromColumn: Fact_Skill_Assessments.SkillID
+	toColumn: Dim_Skills.SkillID
+
+relationship 94b68e52-5876-10b0-e086-3b5df81809c1
+	fromColumn: Fact_Training_LMS.EmployeeID
+	toColumn: Dim_Employee.EmployeeID
+
+relationship 74935ef1-1a6d-1e6a-507a-a9697f6d7ac5
+	fromColumn: Fact_Performance_Reviews.EmployeeID
+	toColumn: Dim_Employee.EmployeeID
+

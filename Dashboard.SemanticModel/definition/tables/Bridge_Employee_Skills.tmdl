@@ -1,0 +1,43 @@
+table Bridge_Employee_Skills
+	lineageTag: 15a52ca3-757f-4a0a-aab1-cde78d97550f
+
+	column EmployeeID
+		dataType: string
+		lineageTag: 51b69e33-363e-4f55-b49a-6221a17f228f
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SkillID
+		dataType: string
+		lineageTag: cb329d59-e581-420a-b3ea-a9e58f1552c2
+		summarizeBy: none
+		sourceColumn: SkillID
+
+		annotation SummarizationSetBy = Automatic
+
+	column RequiredProficiencyLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: f7dd15d5-d6fe-4485-bbc7-7cf02eba0d72
+		summarizeBy: sum
+		sourceColumn: RequiredProficiencyLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Bridge_Employee_Skills = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\DPBA\DPBA First Project\Bridge_Employee_Skills.xlsx"), null, true),
+				    Bridge_Employee_Skills_Sheet = Source{[Item="Bridge_Employee_Skills",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Bridge_Employee_Skills_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EmployeeID", type text}, {"SkillID", type text}, {"RequiredProficiencyLevel", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

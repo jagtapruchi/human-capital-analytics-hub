@@ -1,0 +1,72 @@
+table Dim_Employee
+	lineageTag: f2edb88b-1c39-4b28-9f48-a6154520cf0b
+
+	column EmployeeID
+		dataType: string
+		lineageTag: 7f68d088-2932-45a9-94b0-4c385678b8df
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FullName
+		dataType: string
+		lineageTag: c81476ea-2813-48f3-92f3-c303eaf1738f
+		summarizeBy: none
+		sourceColumn: FullName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department
+		dataType: string
+		lineageTag: 0f5b31cb-d975-4d97-9937-715a4a0aee35
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column Role
+		dataType: string
+		lineageTag: fdd6f9ac-b6fa-400d-bd09-ee3d1559faef
+		summarizeBy: none
+		sourceColumn: Role
+
+		annotation SummarizationSetBy = Automatic
+
+	column HireDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 28653975-6475-44a8-8f58-73117c934e32
+		summarizeBy: none
+		sourceColumn: HireDate
+
+		variation Variation
+			isDefault
+			relationship: a02bcc29-acd9-467b-b412-2dc0df17eea7
+			defaultHierarchy: LocalDateTable_2272a602-c771-4417-bc46-e20030e96f89.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Region
+		dataType: string
+		lineageTag: 3e123cf5-7c90-4f1a-9ba0-b2806e18ec5b
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Employee = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\DPBA\DPBA First Project\Dim_Employee.xlsx"), null, true),
+				    Dim_Employee_Sheet = Source{[Item="Dim_Employee",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Dim_Employee_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EmployeeID", type text}, {"FullName", type text}, {"Department", type text}, {"Role", type text}, {"HireDate", type date}, {"Region", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

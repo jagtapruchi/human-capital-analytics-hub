@@ -1,0 +1,43 @@
+table Dim_Skills
+	lineageTag: 873b4474-c800-4003-afae-ce329661020e
+
+	column SkillID
+		dataType: string
+		lineageTag: e4b241f4-9668-45d3-851d-6387bbffbc64
+		summarizeBy: none
+		sourceColumn: SkillID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SkillName
+		dataType: string
+		lineageTag: 1bca1783-ae94-450f-9e33-aaa765f9f9eb
+		summarizeBy: none
+		sourceColumn: SkillName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: d7591d30-6c7e-4d49-89d8-4778a36d470b
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Skills = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\DPBA\DPBA First Project\Dim_Skills.xlsx"), null, true),
+				    Dim_Skills_Sheet = Source{[Item="Dim_Skills",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Dim_Skills_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"SkillID", type text}, {"SkillName", type text}, {"Category", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

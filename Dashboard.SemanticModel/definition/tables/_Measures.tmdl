@@ -1,0 +1,223 @@
+table _Measures
+	lineageTag: a7f47f41-5a36-483f-9b00-aac9e5036d6d
+
+	measure 'Skills Gap' =
+			
+			VAR TargetScore = MAX(Bridge_Employee_Skills[RequiredProficiencyLevel])
+			VAR ActualScore = CALCULATE(
+			    AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			)
+			RETURN
+			IF(ISBLANK(ActualScore), 0, ActualScore - TargetScore)
+		formatString: 0.00
+		lineageTag: 93a67c61-093a-4b2b-8b31-b6f20cacb722
+
+	measure 'Active Skills Gaps Count' =
+			
+			COUNTROWS(
+			    FILTER(
+			        Bridge_Employee_Skills,
+			        CALCULATE(
+			            AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			            Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			        ) < Bridge_Employee_Skills[RequiredProficiencyLevel]
+			    )
+			)
+		formatString: 0
+		lineageTag: ce913367-352d-4ff6-9f08-1af5305a568d
+
+	measure '% Employees Meeting Skill Target' = ```
+			
+			VAR TotalPairs = COUNTROWS(Bridge_Employee_Skills)
+			VAR MetTarget = 
+			    COUNTROWS(
+			        FILTER(
+			            Bridge_Employee_Skills,
+			            CALCULATE(
+			                AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			                Fact_Skill_Assessments[Timeline] = "Post-Training"
+			            ) >= Bridge_Employee_Skills[RequiredProficiencyLevel]
+			        )
+			    )
+			RETURN
+			DIVIDE(MetTarget, TotalPairs, 0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 6b95cdfc-019b-4686-91c2-972394aa4502
+
+	measure 'Pre-Training Avg Score' =
+			
+			CALCULATE(
+			    AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			)
+		formatString: 0.0
+		lineageTag: 8516cb36-8750-4a3f-8f9f-1fcbfd6da4f3
+
+	measure 'Post-Training Avg Score' =
+			
+			CALCULATE(
+			    AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Post-Training"
+			)
+		formatString: 0.0
+		lineageTag: b6aa91d2-2b82-473c-bce3-452097a7eb6a
+
+	measure 'Absolute Skill Point Gain' = ```
+			
+			CALCULATE(
+			    SUM(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Post-Training"
+			) - 
+			CALCULATE(
+			    SUM(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			)
+			```
+		formatString: 0
+		lineageTag: acb3cb0d-8a38-4952-9d43-58768c9ca21f
+
+	measure 'Total Training Spend' =
+			
+			SUM(Fact_Training_LMS[TrainingCost])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: b49473a5-97ac-467a-9601-b5ab9b77858c
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Cost Per Skill Point Gain' = ```
+			
+			VAR TotalCost = SUM(Fact_Training_LMS[TrainingCost])
+			VAR TotalPointGain = 
+			    CALCULATE(
+			        SUM(Fact_Skill_Assessments[CurrentScore]),
+			        Fact_Skill_Assessments[Timeline] = "Post-Training"
+			    ) - 
+			    CALCULATE(
+			        SUM(Fact_Skill_Assessments[CurrentScore]),
+			        Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			    )
+			RETURN
+			DIVIDE(TotalCost, TotalPointGain, 0)
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 1a8495a6-f8cb-4710-9d5a-75491a109ce5
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg Training Hours Per Employee' =
+			
+			DIVIDE(
+			    SUM(Fact_Training_LMS[HoursSpent]),
+			    DISTINCTCOUNT(Fact_Training_LMS[EmployeeID]),
+			    0
+			)
+		formatString: 0.0
+		lineageTag: 20346890-af15-4cb4-9450-d17f5edfb64b
+
+	measure 'Avg Performance Rating Post' =
+			
+			CALCULATE(
+			    AVERAGE(Fact_Performance_Reviews[PerformanceRating]),
+			    Fact_Performance_Reviews[ReviewPeriod] = "Year-End"
+			)
+		formatString: 0.0
+		lineageTag: 9a6a7238-f69d-4bd7-a216-0b7c1a26d9a3
+
+	measure 'Avg Productivity Metric' =
+			
+			CALCULATE(
+			    AVERAGE(Fact_Performance_Reviews[SalesAchieved_Or_TicketsClosed]),
+			    Fact_Performance_Reviews[ReviewPeriod] = "Year-End"
+			)
+		formatString: 0.0
+		lineageTag: 8954e0cd-7dce-4a95-8660-2d7534a0208b
+
+	measure 'Skills Gap 2' =
+			
+			VAR TargetScore = MAX(Bridge_Employee_Skills[RequiredProficiencyLevel])
+			VAR ActualScore = CALCULATE(
+			    AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			    Fact_Skill_Assessments[Timeline] = "Pre-Training"
+			)
+			RETURN
+			IF(ISBLANK(ActualScore), 0, TargetScore - ActualScore)
+		lineageTag: 019046e1-d9b8-40a4-a89b-770b62ce2875
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Skill Improvement' =
+			
+			VAR SelectedCourses =
+			    VALUES(Fact_Training_LMS[CourseID])
+			
+			VAR RelevantEmployees =
+			    CALCULATETABLE(
+			        DISTINCT(Fact_Training_LMS[EmployeeID]),
+			        SelectedCourses
+			    )
+			
+			VAR PreScore =
+			    CALCULATE(
+			        AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			        Fact_Skill_Assessments[Timeline] = "Pre-Training",
+			        TREATAS(RelevantEmployees, Fact_Skill_Assessments[EmployeeID])
+			    )
+			
+			VAR PostScore =
+			    CALCULATE(
+			        AVERAGE(Fact_Skill_Assessments[CurrentScore]),
+			        Fact_Skill_Assessments[Timeline] = "Post-Training",
+			        TREATAS(RelevantEmployees, Fact_Skill_Assessments[EmployeeID])
+			    )
+			
+			RETURN
+			DIVIDE(PostScore - PreScore, PreScore, 0)
+		formatString: 0%;-0%;0%
+		lineageTag: 28df6f36-4dce-4f2d-9ab4-8848f92a588d
+
+	measure 'Performance Rating Improvement' =
+			
+			VAR SelectedCourses =
+			    VALUES(Fact_Training_LMS[CourseID])
+			
+			VAR RelevantEmployees =
+			    CALCULATETABLE(
+			        DISTINCT(Fact_Training_LMS[EmployeeID]),
+			        SelectedCourses
+			    )
+			
+			VAR MidYear =
+			    CALCULATE(
+			        AVERAGE(Fact_Performance_Reviews[PerformanceRating]),
+			        Fact_Performance_Reviews[ReviewPeriod] = "Mid-Year",
+			        TREATAS(RelevantEmployees, Fact_Performance_Reviews[EmployeeID])
+			    )
+			
+			VAR YearEnd =
+			    CALCULATE(
+			        AVERAGE(Fact_Performance_Reviews[PerformanceRating]),
+			        Fact_Performance_Reviews[ReviewPeriod] = "Year-End",
+			        TREATAS(RelevantEmployees, Fact_Performance_Reviews[EmployeeID])
+			    )
+			
+			RETURN
+			DIVIDE(YearEnd - MidYear, MidYear, 0)
+		formatString: 0%;-0%;0%
+		lineageTag: d0d1b81e-f920-4bfa-8102-2ab2ea8b498a
+
+	column Placeholder
+		lineageTag: dfdae6bc-1fbe-4944-9427-9395483a3d67
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = DATATABLE("Placeholder",STRING,{{}})
+
+	annotation PBI_Id = f1edd1d8521343958a6098b1ce34a193
+

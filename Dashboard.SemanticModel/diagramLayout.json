@@ -1,0 +1,112 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 12.432777688388171
+          },
+          "nodeIndex": "Dim_Employee",
+          "nodeLineageTag": "f2edb88b-1c39-4b28-9f48-a6154520cf0b",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 30.134662590500426,
+            "y": 418.09633917941386
+          },
+          "nodeIndex": "Dim_Skills",
+          "nodeLineageTag": "873b4474-c800-4003-afae-ce329661020e",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 445.52110914453976,
+            "y": 418.09633917941386
+          },
+          "nodeIndex": "Bridge_Employee_Skills",
+          "nodeLineageTag": "15a52ca3-757f-4a0a-aab1-cde78d97550f",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 475.65577173504005,
+            "y": 1.2983330651645062
+          },
+          "nodeIndex": "Fact_Performance_Reviews",
+          "nodeLineageTag": "e64f31cb-729f-4373-af6b-9999b0896447",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 893.26910721372417,
+            "y": 1.2983330651645026
+          },
+          "nodeIndex": "Fact_Skill_Assessments",
+          "nodeLineageTag": "4b10a9ad-4157-4b17-b1fc-9b129d08744e",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 894.454213783843,
+            "y": 365.64256133012447
+          },
+          "nodeIndex": "Fact_Training_LMS",
+          "nodeLineageTag": "12095c12-8ce4-4b1b-a185-98f8b2e7971c",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1178.454213783843,
+            "y": 206.60489182086815
+          },
+          "nodeIndex": "_Measures",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 76.7809863762279,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
